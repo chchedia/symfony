@@ -4,5 +4,6 @@
     <file url="file://$PROJECT_DIR$/src/OC/PlatformBundle/Controller/AdvertController.php" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/OC/PlatformBundle/Resources/config/routing.yml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/OC/PlatformBundle/Resources/views/Advert/index.html.twig" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/OC/PlatformBundle/Resources/views/Advert/view.html.twig" charset="UTF-8" />
   </component>
 </project>
