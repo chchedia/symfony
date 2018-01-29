@@ -55,6 +55,11 @@ class Advert
      */
     private $published= true;
 
+    /**
+     * @ORM\OneToOne(targetEntity="OC\PlatformBundle\Entity\Image", cascade={"persist"})
+     */
+    private $image;
+
 
     /**
      * Get id.
@@ -185,5 +190,10 @@ class Advert
     public function getPublished()
     {
         return $this->published;
+    }
+
+    public function __construct()
+    {
+        $this->date = new \DateTime();
     }
 }
