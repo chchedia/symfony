@@ -196,4 +196,28 @@ class Advert
     {
         $this->date = new \DateTime();
     }
+
+    /**
+     * Set image.
+     *
+     * @param \OC\PlatformBundle\Entity\Image|null $image
+     *
+     * @return Advert
+     */
+    public function setImage(Image $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image.
+     *
+     * @return \OC\PlatformBundle\Entity\Image|null
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
 }

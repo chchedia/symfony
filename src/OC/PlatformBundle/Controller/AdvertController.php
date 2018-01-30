@@ -5,6 +5,8 @@
 namespace OC\PlatformBundle\Controller;
 
 use OC\PlatformBundle\Entity\Advert;
+use OC\PlatformBundle\Entity\Image;
+use OC\PlatformBundle\Entity\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -46,18 +48,29 @@ class AdvertController extends Controller
 
     public function viewAction($id)
     {
-        $repository= $this->getDoctrine()->getManager()->getRepository('OCPlatformBundle:Advert');
-        $advert = $repository->find($id);
+        $em=$this->getDoctrine()->getManager();
+        $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
 
         if ($advert=== null) {
             throw new NotFoundHttpException("L'annonce d'id ". $id. "n'existe pas.");
         }
 
+        // On récupère la liste des candidatures de cette annonce
+        $listApplications = $em
+            ->getRepository('OCPlatformBundle:Application')
+            ->findBy(array('advert' => $advert))
+        ;
+
         return $this->render('OCPlatformBundle:Advert:view.html.twig', array(
-            'advert' => $advert
+            'advert'           => $advert,
+            'listApplications' => $listApplications
         ));
     }
 
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function addAction(Request $request)
     {
         $advert= new Advert();
@@ -65,10 +78,30 @@ class AdvertController extends Controller
         $advert->setAuthor('Chedia');
         $advert->setContent("Nous cherchons un développeur Symfony débutant sur Lille");
 
+        $image= new Image();
+        $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
+        $image->setAlt('Job de rêve');
+        $advert->setImage($image);
+
+        // Création d'une première candidature
+        $application1 = new Application();
+        $application1->setAuthor('Marine');
+        $application1->setContent("J'ai toutes les qualités requises.");
+
+        // Création d'une deuxième candidature par exemple
+        $application2 = new Application();
+        $application2->setAuthor('Pierre');
+        $application2->setContent("Je suis très motivé.");
+
+        $application1->setAdvert($advert);
+        $application2->setAdvert($advert);
+
         //recupérer Entity manager
         $em= $this->getDoctrine()->getManager();
         //persiste l'entité
         $em->persist($advert);
+        $em->persist($application1);
+        $em->persist($application2);
         //flush tout ce qui a été persisté avant
         $em->flush();
         // La gestion d'un formulaire est particulière, mais l'idée est la suivante :
