@@ -264,4 +264,5 @@ class Advert
     {
         return $this->categories;
     }
+
 }

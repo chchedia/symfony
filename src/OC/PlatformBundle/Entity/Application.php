@@ -1,17 +1,28 @@
 <?php
+
 // src/OC/PlatformBundle/Entity/Application.php
+
 
 namespace OC\PlatformBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Application
+ *
  * @ORM\Table(name="oc_application")
  * @ORM\Entity(repositoryClass="OC\PlatformBundle\Repository\ApplicationRepository")
  */
 class Application
 {
     /**
+     * @ORM\ManyToOne (targetEntity="OC\PlatformBundle\Entity\Advert")
+     * @ORM\JoinColumn (nullable=false)
+     */
+    private $advert;
+    /**
+     * @var int
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -19,16 +30,20 @@ class Application
     private $id;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="author", type="string", length=255)
      */
     private $author;
 
     /**
+     * @var string
      * @ORM\Column(name="content", type="text")
      */
     private $content;
 
     /**
+     * @var \DateTime
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
@@ -37,17 +52,25 @@ class Application
     {
         $this->date = new \Datetime();
     }
+
     /**
-     * @ORM\ManyToOne(targetEntity="OC\PlatformBundle\Entity\Advert")
-     * @ORM\JoinColumn(nullable=false)
+     * Get id.
+     *
+     * @return int
      */
-    private $advert;
 
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * Set author.
+     *
+     * @param string $author
+     *
+     * @return Application
+     */
     public function setAuthor($author)
     {
         $this->author = $author;
@@ -55,10 +78,24 @@ class Application
         return $this;
     }
 
+    /**
+     * Get author.
+     *
+     * @return string
+     */
+
     public function getAuthor()
     {
         return $this->author;
     }
+
+    /**
+     * Set content.
+     *
+     * @param string $content
+     *
+     * @return Application
+     */
 
     public function setContent($content)
     {
@@ -67,22 +104,42 @@ class Application
         return $this;
     }
 
+    /**
+     * Get content.
+     *
+     * @return string
+     */
+
     public function getContent()
     {
         return $this->content;
     }
 
-    public function setDate(\Datetime $date)
+    /**
+     * Set date.
+     *
+     * @param \DateTime $date
+     *
+     * @return Application
+     */
+    public function setDate($date)
     {
         $this->date = $date;
 
         return $this;
     }
 
+    /**
+     * Get date.
+     *
+     * @return \DateTime
+     */
+
     public function getDate()
     {
         return $this->date;
     }
+
 
     /**
      * Set advert.
@@ -92,6 +149,7 @@ class Application
      * @return Application
      */
     public function setAdvert(\OC\PlatformBundle\Entity\Advert $advert)
+
     {
         $this->advert = $advert;
 
@@ -100,7 +158,6 @@ class Application
 
     /**
      * Get advert.
-     *
      * @return \OC\PlatformBundle\Entity\Advert
      */
     public function getAdvert()

@@ -61,12 +61,15 @@ class Advert
      */
     private $image;
 
+<<<<<<< HEAD
     /**
      * @ORM\ManyToMany(targetEntity="OC\PlatformBundle\Entity\Category", cascade={"persist"})
      * @ORM\JoinTable(name="oc_advert_category")
      */
     private $categories;
 
+=======
+>>>>>>> origin/master
 
     /**
      * Get id.
@@ -173,7 +176,11 @@ class Advert
     {
         return $this->content;
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> origin/master
 
     /**
      * Set published.
@@ -202,6 +209,7 @@ class Advert
     public function __construct()
     {
         $this->date = new \DateTime();
+<<<<<<< HEAD
         $this->categories= new ArrayCollection();
     }
 
@@ -263,5 +271,7 @@ class Advert
     public function getCategories()
     {
         return $this->categories;
+=======
+>>>>>>> origin/master
     }
 }
