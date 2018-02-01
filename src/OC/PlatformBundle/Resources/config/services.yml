@@ -8,3 +8,6 @@ services:
                     - "@mailer"
                     - "%locale%"
                     - 5
+
+    OC\PlatformBundle\DataFixtures\ORM\LoadCategory:
+        tags: [doctrine.fixture.orm]

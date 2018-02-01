@@ -5,6 +5,7 @@
 namespace OC\PlatformBundle\Controller;
 
 use OC\PlatformBundle\Entity\Advert;
+use OC\PlatformBundle\Entity\AdvertSkill;
 use OC\PlatformBundle\Entity\Image;
 use OC\PlatformBundle\Entity\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -61,9 +62,11 @@ class AdvertController extends Controller
             ->findBy(array('advert' => $advert))
         ;
 
+        $listAdvetSkills= $em->getRepository("OCPlatformBundle:AdvertSkill")->findBy(array("advert"=>$advert));
         return $this->render('OCPlatformBundle:Advert:view.html.twig', array(
             'advert'           => $advert,
-            'listApplications' => $listApplications
+            'listApplications' => $listApplications,
+            'listAdvertSkills' =>$listAdvetSkills
         ));
     }
 
@@ -98,6 +101,16 @@ class AdvertController extends Controller
 
         //recupérer Entity manager
         $em= $this->getDoctrine()->getManager();
+
+        //reccupérer les skills
+        $listSkills= $em->getRepository("OCPlatformBundle:Skill")->findAll();
+        foreach ($listSkills as $skill) {
+            $advertSkill= new AdvertSkill();
+            $advertSkill->setAdvert($advert);
+            $advertSkill->setSkill($skill);
+            $advertSkill->setLevel("Expert");
+            $em->persist($advertSkill);
+        }
         //persiste l'entité
         $em->persist($advert);
         $em->persist($application1);
@@ -121,6 +134,28 @@ class AdvertController extends Controller
 
     public function editAction($id, Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+
+        // On récupère l'annonce $id
+        $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
+
+        if (null === $advert) {
+            throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+        }
+
+        // La méthode findAll retourne toutes les catégories de la base de données
+        $listCategories = $em->getRepository('OCPlatformBundle:Category')->findAll();
+
+        // On boucle sur les catégories pour les lier à l'annonce
+        foreach ($listCategories as $category) {
+            $advert->addCategory($category);
+        }
+
+        // Pour persister le changement dans la relation, il faut persister l'entité propriétaire
+        // Ici, Advert est le propriétaire, donc inutile de la persister car on l'a récupérée depuis Doctrine
+
+        // Étape 2 : On déclenche l'enregistrement
+        $em->flush();
         // Ici, on récupérera l'annonce correspondante à $id
 
         $advert = array(
@@ -138,7 +173,20 @@ class AdvertController extends Controller
 
     public function deleteAction($id)
     {
+        $em= $this->getDoctrine()->getManager();
         // Ici, on récupérera l'annonce correspondant à $id
+        $advert= $em->getRepository("OCPlatformBundle:Advert")->find($id);
+
+        if ($advert === null){
+            throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas!");
+        }
+        // boucler les catégories de l'annonce pour les supprimer
+        foreach ($advert->getCategories() as $category){
+            $advert->removeCategory($category);
+        }
+
+        //declancher la modification
+        $em->flush();
 
         // Ici, on gérera la suppression de l'annonce en question
 
