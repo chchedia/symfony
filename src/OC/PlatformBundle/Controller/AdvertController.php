@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AdvertController extends Controller
 {
-
+// aprés le commit supprimer LoadSkill
     public function indexAction($page)
     {
         // ...
