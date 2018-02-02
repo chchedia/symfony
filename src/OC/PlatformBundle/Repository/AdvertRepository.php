@@ -2,6 +2,7 @@
 
 namespace OC\PlatformBundle\Repository;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -12,43 +13,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class AdvertRepository extends EntityRepository
 {
-    public function myFindAll()
+    public function whereCurrentYear(QueryBuilder $qb)
     {
-        //Methode 1: en passant par l'entitymanager
-        $queryBuilder = $this->_em->createQueryBuilder()
-            ->select('a')
-            ->from($this->_entityName, 'a');
-
-        //methode 2: en passant par le raccourci
-        $queryBuilder = $this->createQueryBuilder('a');
-
-        //la recuperation de query a partir du QueryBuilder
-        $query = $queryBuilder->getQuery();
-
-        //la recuperation des resultats
-        $results = $query->getResult();
-
-        return $results;
-
+        $qb->where('a.date BETWEEN :start AND :end')
+            ->setParameter('start', new\DateTime(date('Y').'-01-01'))
+            ->setParameter('end' , new \DateTime(date('Y').'-12-31'));
     }
 
-    public function myFindOne($id)
+    //pour utliser cette methode
+    public function myFind()
     {
-        $qb = $this->createQueryBuilder('a');
+        $qb= $this->createQueryBuilder('a');
+        $qb->where('a.author = :author')->setParameter('author', 'Chedia');
 
-        $qb->where('a.id = :id')->setParameter('id', $id);
-
-        return $qb->getQuery()->getResult();
-    }
-
-    //une methode recupére touttes les annonces ecrites  par un auteur ayant une année donnée
-    public function findByAuthorAndDate($author, $year)
-    {
-        $qb = $this->createQueryBuilder('a');
-
-        $qb->where('a.author = :author')->setParameter('author', $author)
-            ->andWhere('a.date = :year')->setParmeter('year', $year)
-            ->orderBy('a.date', 'DESC');
+        $this->whereCurrentYear($qb);
+        $qb->orderBy('a.date', 'DESC');
 
         return $qb->getQuery()->getResult();
     }
