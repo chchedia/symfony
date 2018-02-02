@@ -13,22 +13,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class AdvertRepository extends EntityRepository
 {
-    public function whereCurrentYear(QueryBuilder $qb)
+    public function getAdvertWithApplications()
     {
-        $qb->where('a.date BETWEEN :start AND :end')
-            ->setParameter('start', new\DateTime(date('Y').'-01-01'))
-            ->setParameter('end' , new \DateTime(date('Y').'-12-31'));
-    }
+        $dq= $this->createQueryBuilder('a')
+            ->leftJoin('a.applications','app')
+            ->addSelect('app');
 
-    //pour utliser cette methode
-    public function myFind()
-    {
-        $qb= $this->createQueryBuilder('a');
-        $qb->where('a.author = :author')->setParameter('author', 'Chedia');
-
-        $this->whereCurrentYear($qb);
-        $qb->orderBy('a.date', 'DESC');
-
-        return $qb->getQuery()->getResult();
+        return $dq->getQuery()->getResult();
     }
 }
