@@ -77,14 +77,14 @@ class AdvertController extends Controller
     public function addAction(Request $request)
     {
         $advert= new Advert();
-        $advert->setTitle("Recherche d'une infographiste");
-        $advert->setAuthor('Chedia');
-        $advert->setContent("Nous cherchons une infographiste débutante sur Lille");
+        $advert->setTitle("test et encore des tests!!");
+        $advert->setAuthor('encore Chedia');
+        $advert->setContent("le contenu de l'annonce test");
         $advert->setEmail("chebichedia@gmail.com");
 
         $image= new Image();
-        $image->setUrl('http://www.imaginetonfutur.com/uploads/files/infographiste.jpg');
-        $image->setAlt('Job infographiste');
+        $image->setUrl('https://upload.wikimedia.org/wikipedia/commons/9/9c/Pm5544_ntsc-2-.png');
+        $image->setAlt('test');
         $advert->setImage($image);
 
         // Création d'une première candidature

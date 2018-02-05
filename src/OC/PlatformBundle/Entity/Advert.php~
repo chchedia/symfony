@@ -4,6 +4,7 @@ namespace OC\PlatformBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Advert
@@ -97,6 +98,13 @@ class Advert
     {
         $this->nbApplications--;
     }
+
+    /**
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(name="slug", type="string", length=255, unique=true)
+     */
+    private $slug;
+
     /**
      * Get id.
      *
@@ -366,5 +374,53 @@ class Advert
     public function updateDate()
     {
         $this->setUpdatedAt(new \DateTime());
+    }
+
+    /**
+     * Set email.
+     *
+     * @param string|null $email
+     *
+     * @return Advert
+     */
+    public function setEmail($email = null)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email.
+     *
+     * @return string|null
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set nbApplications.
+     *
+     * @param int|null $nbApplications
+     *
+     * @return Advert
+     */
+    public function setNbApplications($nbApplications = null)
+    {
+        $this->nbApplications = $nbApplications;
+
+        return $this;
+    }
+
+    /**
+     * Get nbApplications.
+     *
+     * @return int|null
+     */
+    public function getNbApplications()
+    {
+        return $this->nbApplications;
     }
 }
