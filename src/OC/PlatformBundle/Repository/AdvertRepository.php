@@ -22,4 +22,19 @@ class AdvertRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * get a limited list of Adverts
+     *
+     * @param $limit
+     * @return mixed
+     */
+    public function getLastAdverts($limit)
+    {
+        $qb= $this->createQueryBuilder('a')
+            ->orderBy('a.date', 'DESC');
+        $qb->setMaxResults($limit);
+
+        return $qb->getQuery()->getResult();
+    }
 }
