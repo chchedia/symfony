@@ -13,12 +13,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class AdvertRepository extends EntityRepository
 {
-    public function getAdvertWithApplications()
+    public function getAdvertWithCategories(array  $categoryNames)
     {
-        $dq= $this->createQueryBuilder('a')
-            ->leftJoin('a.applications','app')
-            ->addSelect('app');
+        $qb= $this->createQueryBuilder('a')
+            ->innerJoin('a.categories','c')
+            ->addSelect('c');
+        $qb->where($qb->expr()->in('c.name', $categoryNames));
 
-        return $dq->getQuery()->getResult();
+        return $qb->getQuery()->getResult();
     }
 }

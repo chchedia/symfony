@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="oc_advert")
  * @ORM\Entity(repositoryClass="OC\PlatformBundle\Repository\AdvertRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Advert
 {
@@ -28,6 +29,11 @@ class Advert
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+
+    /**
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
 
     /**
      * @var string
@@ -106,6 +112,8 @@ class Advert
     {
         return $this->date;
     }
+
+    
 
     /**
      * Set title.
@@ -308,5 +316,37 @@ class Advert
     public function getApplications()
     {
         return $this->applications;
+    }
+
+    /**
+     * Set updatedAt.
+     *
+     * @param \DateTime|null $updatedAt
+     *
+     * @return Advert
+     */
+    public function setUpdatedAt($updatedAt = null)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt.
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate()
+    {
+        $this->setUpdatedAt(new \DateTime());
     }
 }
