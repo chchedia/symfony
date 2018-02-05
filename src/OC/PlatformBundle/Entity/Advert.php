@@ -74,12 +74,18 @@ class Advert
     private $categories;
 
     /**
+     * @ORM\Column(name="email" , type="text", nullable=true)
+     */
+    private $email;
+
+    /**
      * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\Application", mappedBy="advert")
      */
+
     private $applications;
 
     /**
-     * @ORM\Column(name="nb_applications", type="integer")
+     * @ORM\Column(name="nb_applications", type="integer", nullable=true)
      */
     private $nbApplications= 0;
 
@@ -360,5 +366,53 @@ class Advert
     public function updateDate()
     {
         $this->setUpdatedAt(new \DateTime());
+    }
+
+    /**
+     * Set email.
+     *
+     * @param string|null $email
+     *
+     * @return Advert
+     */
+    public function setEmail($email = null)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email.
+     *
+     * @return string|null
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set nbApplications.
+     *
+     * @param int|null $nbApplications
+     *
+     * @return Advert
+     */
+    public function setNbApplications($nbApplications = null)
+    {
+        $this->nbApplications = $nbApplications;
+
+        return $this;
+    }
+
+    /**
+     * Get nbApplications.
+     *
+     * @return int|null
+     */
+    public function getNbApplications()
+    {
+        return $this->nbApplications;
     }
 }

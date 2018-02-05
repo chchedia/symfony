@@ -77,13 +77,14 @@ class AdvertController extends Controller
     public function addAction(Request $request)
     {
         $advert= new Advert();
-        $advert->setTitle("Recherche développeur Symfony.");
+        $advert->setTitle("Recherche d'une infographiste");
         $advert->setAuthor('Chedia');
-        $advert->setContent("Nous cherchons un développeur Symfony débutant sur Lille");
+        $advert->setContent("Nous cherchons une infographiste débutante sur Lille");
+        $advert->setEmail("chebichedia@gmail.com");
 
         $image= new Image();
-        $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
-        $image->setAlt('Job de rêve');
+        $image->setUrl('http://www.imaginetonfutur.com/uploads/files/infographiste.jpg');
+        $image->setAlt('Job infographiste');
         $advert->setImage($image);
 
         // Création d'une première candidature

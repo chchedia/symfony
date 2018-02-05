@@ -12,13 +12,13 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="oc_application")
  * @ORM\Entity(repositoryClass="OC\PlatformBundle\Repository\ApplicationRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Application
 {
     /**
      * @ORM\ManyToOne (targetEntity="OC\PlatformBundle\Entity\Advert", inversedBy="applications")
      * @ORM\JoinColumn (nullable=false)
-     * @ORM\HasLifecycleCallbacks()
      */
     private $advert;
     /**
