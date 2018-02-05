@@ -18,6 +18,7 @@ class Application
     /**
      * @ORM\ManyToOne (targetEntity="OC\PlatformBundle\Entity\Advert", inversedBy="applications")
      * @ORM\JoinColumn (nullable=false)
+     * @ORM\HasLifecycleCallbacks()
      */
     private $advert;
     /**
@@ -52,7 +53,21 @@ class Application
     {
         $this->date = new \Datetime();
     }
+    /**
+     * @ORM\PrePersist
+     */
+    public function increase()
+    {
+        $this->getAdvert()->increaseApplication();
+    }
 
+    /**
+     * @ORM\PreRemove
+     */
+    public function decrease()
+    {
+        $this->getAdvert()->decreaseApplication();
+    }
     /**
      * Get id.
      *

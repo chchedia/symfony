@@ -78,7 +78,19 @@ class Advert
      */
     private $applications;
 
+    /**
+     * @ORM\Column(name="nb_applications", type="integer")
+     */
+    private $nbApplications= 0;
 
+    public function increaseApplication()
+    {
+        $this->nbApplications++;
+    }
+    public function decreaseApplication()
+    {
+        $this->nbApplications--;
+    }
     /**
      * Get id.
      *
