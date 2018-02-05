@@ -140,8 +140,7 @@ class AdvertController extends Controller
         if (null === $advert) {
             throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
         }
-        $newContent= $request->request->get('newContent');
-        $advert->setContent($newContent);
+        $advert->setContent("Je cherche des développeurs motivés!");
         $advert->updateDate();
         $em->flush();
         if ($request->isMethod('POST')) {

@@ -11,7 +11,12 @@
     <h2>Modifier une annonce</h2>
 
     {{ include("OCPlatformBundle:Advert:form.html.twig") }}
-    {{ advert.content }}
+    <div class="well">
+        <h2>{{ advert.title }} - {{ advert.author }}</h2>
+        <p>La publucation a été changée le {{ advert.updatedAt|date('d/m/Y') }}</p>
+        <p>Le nouveau contenu est :{{ advert.content }}</p>
+    </div>
+
 
     <p>
         Vous éditez une annonce déjà existante, merci de ne pas changer
