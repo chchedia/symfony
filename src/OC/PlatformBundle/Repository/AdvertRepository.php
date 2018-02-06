@@ -4,6 +4,7 @@ namespace OC\PlatformBundle\Repository;
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * AdvertRepository
@@ -13,28 +14,53 @@ use Doctrine\ORM\EntityRepository;
  */
 class AdvertRepository extends EntityRepository
 {
-    public function getAdvertWithCategories(array  $categoryNames)
+    /**
+     * @param \DateTime $date
+     * @return mixed
+     */
+    public function getAdvertBefore(\DateTime $date)
     {
-        $qb= $this->createQueryBuilder('a')
-            ->innerJoin('a.categories','c')
+        $query= $this->createQueryBuilder('a')
+            ->where('a.updatedAt < :date')
+            ->orWhere('a.date < :date AND a.updatedAt IS NULL')
+            ->andWhere('a.applications IS EMPTY')
+            ->setParameter('date', $date);
+        return $query->getQuery()->getResult();
+    }
+
+    /**
+     * get all Adverts
+     * @return mixed
+     */
+    public function getAdverts($page, $nbPerPage)
+    {
+        $query = $this->createQueryBuilder('a')
+            ->leftJoin('a.image', 'i')
+            ->addSelect('i')
+            ->leftJoin('a.categories', 'c')
+            ->addSelect('c')
+            ->orderBy('a.date', 'DESC')
+            ->getQuery();
+
+        $query->setFirstResult(($page - 1) * $nbPerPage)
+            ->setMaxResults($nbPerPage);
+
+        return new Paginator($query,true);
+    }
+
+    /**
+     *
+     * @param array $categoryNames
+     * @return mixed
+     */
+    public function getAdvertWithCategories(array $categoryNames)
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->innerJoin('a.categories', 'c')
             ->addSelect('c');
         $qb->where($qb->expr()->in('c.name', $categoryNames));
 
         return $qb->getQuery()->getResult();
     }
 
-    /**
-     * get a limited list of Adverts
-     *
-     * @param $limit
-     * @return mixed
-     */
-    public function getLastAdverts($limit)
-    {
-        $qb= $this->createQueryBuilder('a')
-            ->orderBy('a.date', 'DESC');
-        $qb->setMaxResults($limit);
-
-        return $qb->getQuery()->getResult();
-    }
 }

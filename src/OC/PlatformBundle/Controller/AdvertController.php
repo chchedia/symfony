@@ -17,16 +17,21 @@ class AdvertController extends Controller
     public function indexAction($page)
     {
         if ($page < 1) {
-            throw new NotFoundHttpException('Page "'.$page.'" inexistante.');
+            throw new NotFoundHttpException('Page "' . $page . '" inexistante.');
         }
+        $nbPerPage = 3;
 
         // récupérer la liste des annonces
         $em = $this->getDoctrine()->getManager();
-        $listAdverts = $em->getRepository('OCPlatformBundle:Advert')->findAll();
+        $listAdverts = $em->getRepository('OCPlatformBundle:Advert')->getAdverts($page, $nbPerPage);
+
+        $nbPages = ceil(count($listAdverts) / $nbPerPage);
 
         //la vue index
         return $this->render('OCPlatformBundle:Advert:index.html.twig', array(
-            'listAdverts' => $listAdverts
+            'listAdverts' => $listAdverts,
+            'nbPages' => $nbPages,
+            'page' => $page,
         ));
     }
 
@@ -58,7 +63,7 @@ class AdvertController extends Controller
      */
     public function addAction(Request $request)
     {
-        $em=$this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
         // Si la requête est en POST, c'est que le visiteur a soumis le formulaire
         /*if ($request->isMethod('POST')) {
@@ -119,12 +124,24 @@ class AdvertController extends Controller
     public function menuAction($limit)
     {
         $em = $this->getDoctrine()->getManager();
-        $limitedList = $em->getRepository("OCPlatformBundle:Advert")->getLastAdverts($limit);
+        $limitedList = $em->getRepository("OCPlatformBundle:Advert")->findBy(
+            array(),
+            array('date' => 'desc'),
+            $limit,
+            0
+        );
 
         return $this->render('OCPlatformBundle:Advert:menu.html.twig', array(
             'listAdverts' => $limitedList
         ));
     }
 
+    public function purgeAction($days, Request $request)
+    {
+        $purger = $this->get("oc_platform.purger.advert");
+        $purger->purge($days);
 
+        $request->getSession()->getFlashBag()->add('Alerte', 'Les anciens annonces, depuis ' . $days . ' jours ont été purgées.');
+        return $this->redirectToRoute('oc_platform_home');
+    }
 }

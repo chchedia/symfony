@@ -12,10 +12,20 @@ class ApplicationCreationListener
      */
     private $applicationMailer;
 
+    /**
+     * ApplicationCreationListener constructor.
+     * @param ApplicationMailer $applicationMailer
+     */
+
     public function __construct(ApplicationMailer $applicationMailer)
     {
         $this->applicationMailer=$applicationMailer;
     }
+
+    /**
+     * send notification if the entity is Application
+     * @param LifecycleEventArgs $args
+     */
 
     public function postPersist(LifecycleEventArgs $args)
     {
