@@ -8,6 +8,7 @@ use OC\PlatformBundle\Entity\Advert;
 use OC\PlatformBundle\Entity\AdvertSkill;
 use OC\PlatformBundle\Entity\Image;
 use OC\PlatformBundle\Entity\Application;
+use OC\PlatformBundle\Form\AdvertType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -71,17 +72,8 @@ class AdvertController extends Controller
     {
         $advert=new Advert();
 
-        $formBuilder= $this->get('form.factory')->createBuilder(formType::class, $advert);
+        $form =$this->get('form.factory')->create(AdvertType::class, $advert);
 
-        $formBuilder
-            ->add('date', DateType::class)
-            ->add('title', TextType::class)
-            ->add('content', TextareaType::class)
-            ->add('author', TextType::class)
-            ->add('published', CheckboxType::class, array('required'=> false))
-            ->add('save', SubmitType::class);
-
-        $form=$formBuilder->getForm();
 
         if( $request->isMethod('POST'))
         {
