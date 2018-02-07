@@ -11,6 +11,12 @@ use OC\PlatformBundle\Entity\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class AdvertController extends Controller
 {
@@ -63,20 +69,39 @@ class AdvertController extends Controller
      */
     public function addAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $advert=new Advert();
 
-        // Si la requête est en POST, c'est que le visiteur a soumis le formulaire
-        /*if ($request->isMethod('POST')) {
-            // Ici, on s'occupera de la création et de la gestion du formulaire
+        $formBuilder= $this->get('form.factory')->createBuilder(formType::class, $advert);
 
-            $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
+        $formBuilder
+            ->add('date', DateType::class)
+            ->add('title', TextType::class)
+            ->add('content', TextareaType::class)
+            ->add('author', TextType::class)
+            ->add('published', CheckboxType::class, array('required'=> false))
+            ->add('save', SubmitType::class);
 
-            // Puis on redirige vers la page de visualisation de cettte annonce
-            return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
+        $form=$formBuilder->getForm();
+
+        if( $request->isMethod('POST'))
+        {
+            $form->handleRequest($request);
+
+            if ($form->isValid())
+            {
+                $em=$this->getDoctrine()->getManager();
+                $em->persist($advert);
+                $em->flush();
+
+                $request->getSession()->getFlashBag()->add('notice','Annonce bine enregistrée.');
+
+                return $this->redirectToRoute('oc_platform_view', array('id'=> $advert->getId()));
+            }
+
         }
-        // Si on n'est pas en POST, alors on affiche le formulaire
-        return $this->render('OCPlatformBundle:Advert:add.html.twig', array('advert' => $advert));
-        */
+
+        return $this->render('OCPlatformBundle:Advert:add.html.twig', array('form' => $form->createView()));
+
     }
 
     public function editAction($id, Request $request)
