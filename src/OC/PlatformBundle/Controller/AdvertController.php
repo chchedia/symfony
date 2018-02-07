@@ -72,7 +72,7 @@ class AdvertController extends Controller
     {
         $advert=new Advert();
 
-        $form =$this->get('form.factory')->create(AdvertType::class, $advert);
+        $form =$this->createForm(AdvertType::class, $advert);
 
 
         if( $request->isMethod('POST'))

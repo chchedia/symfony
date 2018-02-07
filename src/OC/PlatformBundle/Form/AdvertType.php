@@ -5,6 +5,7 @@ namespace OC\PlatformBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use OC\PlatformBundle\Form\ImageType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -24,6 +25,7 @@ class AdvertType extends AbstractType
             ->add('content', TextareaType::class)
             ->add('author', TextType::class)
             ->add('published', CheckboxType::class, array('required'=> false))
+            ->add('image', ImageType::class)
             ->add('save', SubmitType::class);
     }/**
      * {@inheritdoc}
