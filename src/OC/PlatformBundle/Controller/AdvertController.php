@@ -75,12 +75,10 @@ class AdvertController extends Controller
         $form =$this->createForm(AdvertType::class, $advert);
 
 
-        if( $request->isMethod('POST'))
+        if( $request->isMethod('POST') && $form->handleRequest($request)->isValid())
         {
-            $form->handleRequest($request);
+            $advert->getImage()->upload();
 
-            if ($form->isValid())
-            {
                 $em=$this->getDoctrine()->getManager();
                 $em->persist($advert);
                 $em->flush();
@@ -88,7 +86,7 @@ class AdvertController extends Controller
                 $request->getSession()->getFlashBag()->add('notice','Annonce bine enregistrée.');
 
                 return $this->redirectToRoute('oc_platform_view', array('id'=> $advert->getId()));
-            }
+
 
         }
 

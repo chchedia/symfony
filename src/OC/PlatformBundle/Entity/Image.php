@@ -3,6 +3,7 @@
 namespace OC\PlatformBundle\Entity;
 
 Use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Image
@@ -29,6 +30,17 @@ class Image
      */
     private $alt;
 
+    private $file;
+
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
 
     /**
      * Get id.
@@ -87,4 +99,31 @@ class Image
     {
         return $this->alt;
     }
+
+    public function upload()
+    {
+        if ($this->file === null)
+        {
+            return;
+        }
+
+        $name= $this->file->getClientOriginalName();
+
+        $this->file->move($this->getUploadRootDir(), $name);
+
+        $this->url = $name;
+
+        $this->alt = $name;
+    }
+
+    public function getUploadDir()
+    {
+        return 'uploads/img';
+    }
+
+    protected function getUploadRootDir()
+    {
+        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+    }
 }
+
