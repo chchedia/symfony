@@ -75,19 +75,15 @@ class AdvertController extends Controller
         $form =$this->createForm(AdvertType::class, $advert);
 
 
-        if( $request->isMethod('POST') && $form->handleRequest($request)->isValid())
-        {
-            $advert->getImage()->upload();
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            //$advert->getImage()->upload();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($advert);
+            $em->flush();
 
-                $em=$this->getDoctrine()->getManager();
-                $em->persist($advert);
-                $em->flush();
+            $request->getSession()->getFlashBag()->add('notice', 'Annonce bine enregistrée.');
 
-                $request->getSession()->getFlashBag()->add('notice','Annonce bine enregistrée.');
-
-                return $this->redirectToRoute('oc_platform_view', array('id'=> $advert->getId()));
-
-
+            return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
         }
 
         return $this->render('OCPlatformBundle:Advert:add.html.twig', array('form' => $form->createView()));
