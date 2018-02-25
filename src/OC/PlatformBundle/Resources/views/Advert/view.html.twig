@@ -11,7 +11,7 @@
     {# On vérifie qu'une image soit bien associée à l'annonce #}
     {% if advert.image is not null %}
         <img
-                src="{{ asset(advert.image.uploadDir ~ '/' ~ advert.image.id ~ '.' ~ advert.image.url) }}"
+                src="{{ asset(advert.image.webPath) }}"
                 alt="{{ advert.image.alt }}"
         />
     {% endif %}
