@@ -8,6 +8,7 @@ use OC\PlatformBundle\Entity\Advert;
 use OC\PlatformBundle\Entity\AdvertSkill;
 use OC\PlatformBundle\Entity\Image;
 use OC\PlatformBundle\Entity\Application;
+use OC\PlatformBundle\Form\AdvertEditType;
 use OC\PlatformBundle\Form\AdvertType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,9 +71,9 @@ class AdvertController extends Controller
      */
     public function addAction(Request $request)
     {
-        $advert=new Advert();
+        $advert = new Advert();
 
-        $form =$this->createForm(AdvertType::class, $advert);
+        $form = $this->get('form.factory')->create(AdvertType::class, $advert);
 
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
@@ -100,19 +101,23 @@ class AdvertController extends Controller
         if (null === $advert) {
             throw new NotFoundHttpException("L'annonce d'id " . $id . " n'existe pas.");
         }
-        //la gestion du formulaire
 
-        if ($request->isMethod('POST')) {
+        $form = $this->get('form.factory')->create(AdvertEditType::class, $advert);
+
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            $em->flush();
+
             $request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiée.');
             return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
         }
         return $this->render('OCPlatformBundle:Advert:edit.html.twig', array(
-            'advert' => $advert
+            'advert' => $advert,
+            'form' => $form->createView(),
         ));
     }
 
 
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
         // Ici, on récupérera l'annonce correspondant à $id
@@ -121,15 +126,20 @@ class AdvertController extends Controller
         if ($advert === null) {
             throw new NotFoundHttpException("L'annonce d'id " . $id . " n'existe pas!");
         }
-        // boucler les catégories de l'annonce pour les supprimer
-        foreach ($advert->getCategories() as $category) {
-            $advert->removeCategory($category);
+
+        $form = $this->get('form.factory')->create();
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            $em->remove($advert);
+            $em->flush();
+            $request->getSession()->getFlashBag()->add('notice', 'Annonce supprimée.');
+
+            return $this->redirectToRoute("oc_platform_home");
         }
 
-        //declancher la modification
-        $em->flush();
-
-        return $this->render('OCPlatformBundle:Advert:delete.html.twig');
+        return $this->render('OCPlatformBundle:Advert:delete.html.twig', array(
+            'advert' =>$advert,
+            'form' => $form->createView()
+        ));
     }
 
     public function menuAction($limit)

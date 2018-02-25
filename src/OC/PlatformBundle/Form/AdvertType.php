@@ -22,37 +22,36 @@ class AdvertType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $pattern='D%';
+        $pattern = 'D%';
         $builder
             ->add('date', DateTimeType::class)
             ->add('title', TextType::class)
             ->add('content', TextareaType::class)
             ->add('author', TextType::class)
-            //->add('published', CheckboxType::class, array('required'=> false))
-            ->add('image', ImageType::class)
+            ->add('image', ImageType::class, array('required'=>false))
             ->add('categories', EntityType::class, array(
-                'class'=> 'OCPlatformBundle:Category',
-                'choice_label'=> 'name',
-                'multiple'=> true,
-                'query_builder'=>function(CategoryRepository $repository) use ($pattern){
-                    return$repository->getLikeQueryBuilder($pattern);
+                'class' => 'OCPlatformBundle:Category',
+                'choice_label' => 'name',
+                'multiple' => true,
+                'query_builder' => function (CategoryRepository $repository) use ($pattern) {
+                    return $repository->getLikeQueryBuilder($pattern);
                 }
             ))
             ->add('save', SubmitType::class);
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event){
-            $advert= $event->getData();
-            if ($advert=== null)
-            {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $advert = $event->getData();
+            if ($advert === null) {
                 return;
             }
-            if (!$advert->getPublished() || $advert->getId() === null)
-            {
-                $event->getForm()->add('published', checkboxType::class, array('required'=> false));
-            }else {
+            if (!$advert->getPublished() || $advert->getId() === null) {
+                $event->getForm()->add('published', checkboxType::class, array('required' => false));
+            } else {
                 $event->getForm()->remove('published');
             }
         });
-    }/**
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
