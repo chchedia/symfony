@@ -11,6 +11,7 @@ use OC\PlatformBundle\Entity\Application;
 use OC\PlatformBundle\Form\AdvertEditType;
 use OC\PlatformBundle\Form\AdvertType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -137,7 +138,7 @@ class AdvertController extends Controller
         }
 
         return $this->render('OCPlatformBundle:Advert:delete.html.twig', array(
-            'advert' =>$advert,
+            'advert' => $advert,
             'form' => $form->createView()
         ));
     }
@@ -164,5 +165,26 @@ class AdvertController extends Controller
 
         $request->getSession()->getFlashBag()->add('Alerte', 'Les anciens annonces, depuis ' . $days . ' jours ont été purgées.');
         return $this->redirectToRoute('oc_platform_home');
+    }
+
+    public function testAction()
+    {
+        $advert = new Advert;
+
+        $advert->setDate(new \DateTime());
+        $advert->setTitle('abc');
+        $advert->setContent('blabla');
+        $advert->setAuthor('A');
+
+        $validator= $this->get('validator');
+
+        $listErrors=$validator->validate($advert);
+
+        if(count($listErrors)> 0)
+        {
+            return new Response((string) $listErrors);
+        } else {
+            return new Response("L'annonce est valide!");
+        }
     }
 }

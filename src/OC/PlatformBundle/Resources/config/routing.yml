@@ -37,3 +37,7 @@ oc_platform_purge:
         _controller: OCPlatformBundle:Advert:purge
     requirements:
         id: \d+
+oc_platform_test:
+    path:      /test
+    defaults:
+        _controller: OCPlatformBundle:Advert:test
