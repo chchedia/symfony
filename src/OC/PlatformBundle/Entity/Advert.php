@@ -96,7 +96,7 @@ class Advert
      * @ORM\Column(name="slug", type="string", length=255, unique=true)
      */
     private $slug;
-
+    
     public function __construct()
     {
         $this->date         = new \Datetime();

@@ -12,4 +12,9 @@ use Symfony\Component\Validator\Constraint;
 class Antiflood extends Constraint
 {
     public $message="Vous avez déjà posté un messsage il y amois de 15 secondes, merci d'attendre un peu";
+
+    public function validatedBy()
+    {
+        return 'oc_platform_antiflood';
+    }
 }
