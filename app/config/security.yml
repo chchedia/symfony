@@ -33,5 +33,5 @@ security:
         target: login
 
   access_control:
-    #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+    - { path: ^/admin, roles: ROLE_ADMIN, requires_channel: https }
 
