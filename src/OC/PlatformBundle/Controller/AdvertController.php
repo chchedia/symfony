@@ -72,6 +72,9 @@ class AdvertController extends Controller
      */
     public function addAction(Request $request)
     {
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_AUTEUR')) {
+            throw new AccessDeniedException('Accès limité aux auteurs.');
+        }
         $advert = new Advert();
 
         $form = $this->get('form.factory')->create(AdvertType::class, $advert);
