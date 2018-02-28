@@ -20,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class AdvertController extends Controller
 {
@@ -69,12 +70,10 @@ class AdvertController extends Controller
     /**
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @Security("has_role('ROLE_AUTEUR')")
      */
     public function addAction(Request $request)
     {
-        if (!$this->get('security.authorization_checker')->isGranted('ROLE_AUTEUR')) {
-            throw new AccessDeniedException('Accès limité aux auteurs.');
-        }
         $advert = new Advert();
 
         $form = $this->get('form.factory')->create(AdvertType::class, $advert);
