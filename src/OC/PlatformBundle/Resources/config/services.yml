@@ -6,8 +6,9 @@ services:
         class: OC\PlatformBundle\Antispam\OCAntispam
         arguments:
                     - "@mailer"
-                    - "%locale%"
                     - 5
+        calls:
+                    - [ setLocale, [%locale%] ]
     oc_platform.email.application_mailer:
         class: OC\PlatformBundle\Email\ApplicationMailer
         arguments:
@@ -33,3 +34,7 @@ services:
           - "@oc_platform.antispam"
         tags:
           -  { name: twig.extension }
+    oc_platform.form.ckeditor:
+        class: OC\PlatformBundle\Form\CkeditorType
+        tags:
+          - { name: form.type, alias: ckeditor }
