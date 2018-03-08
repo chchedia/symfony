@@ -8,6 +8,8 @@ use OC\PlatformBundle\Entity\Advert;
 use OC\PlatformBundle\Entity\AdvertSkill;
 use OC\PlatformBundle\Entity\Image;
 use OC\PlatformBundle\Entity\Application;
+use OC\PlatformBundle\Event\MessagePostEvent;
+use OC\PlatformBundle\Event\PlatformEvents;
 use OC\PlatformBundle\Form\AdvertEditType;
 use OC\PlatformBundle\Form\AdvertType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -80,6 +82,12 @@ class AdvertController extends Controller
 
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            //creer l'evenement
+            $event= new MessagePostEvent($advert->getUser(), $advert->getContent());
+            //declancher l'evenement
+            $this->get('event_dispatcher')->dispatch(PlatformEvents::POST_MESSAGE, $event);
+            $advert->setContent($event->getMessage());
+
             //$advert->getImage()->upload();
             $em = $this->getDoctrine()->getManager();
             $em->persist($advert);

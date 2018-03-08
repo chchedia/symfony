@@ -2,6 +2,7 @@
 
 namespace OC\UserBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 /**
@@ -20,5 +21,19 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+    /**
+     * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\Advert", mappedBy="user")
+     */
+    private $adverts;
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->adverts= new ArrayCollection();
+        parent::__construct();
+    }
+
 
 }

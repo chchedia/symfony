@@ -43,12 +43,9 @@ class Advert
     private $title;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="author", type="string", length=255)
-     * @Assert\Length(min=2)
+     * @ORM\ManyToOne(targetEntity="OC\UserBundle\Entity\User", cascade={"persist", "remove"})
      */
-    private $author;
+    private $user;
 
     /**
      * @var string
@@ -79,6 +76,7 @@ class Advert
      * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\Application", mappedBy="advert")
      */
     private $applications; // Notez le « s », une annonce est liée à plusieurs candidatures
+
 
     /**
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
@@ -159,22 +157,6 @@ class Advert
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * @param string $author
-     */
-    public function setAuthor($author)
-    {
-        $this->author = $author;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAuthor()
-    {
-        return $this->author;
     }
 
     /**
@@ -316,5 +298,29 @@ class Advert
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * Set user
+     *
+     * @param string $user
+     *
+     * @return Advert
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return string
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
