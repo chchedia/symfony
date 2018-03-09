@@ -11,7 +11,7 @@ class MessagePostEvent extends Event
     protected $message;
     protected $user;
 
-    public function __construct(UserInterface $user, $message)
+    public function __construct($user, $message)
     {
         $this->message = $message;
         $this->user = $user;

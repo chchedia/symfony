@@ -3,6 +3,7 @@
 namespace OC\PlatformBundle\Form;
 
 use OC\PlatformBundle\Repository\CategoryRepository;
+use OC\UserBundle\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -27,7 +28,15 @@ class AdvertType extends AbstractType
             ->add('date', DateTimeType::class)
             ->add('title', TextType::class)
             ->add('content', CkeditorType::class)
-            ->add('author', TextType::class)
+            ->add('user', EntityType::class,
+                array(
+                    'class' => 'OCUserBundle:User',
+                    'choice_label' => 'username',
+                    'multiple' => false,
+                    'query_builder' => function (UserRepository $repository) use ($pattern) {
+                        return $repository->getLikeQueryBuilder($pattern);
+                    }
+                ))
             ->add('image', ImageType::class, array('required'=>false))
             ->add('categories', EntityType::class, array(
                 'class' => 'OCPlatformBundle:Category',

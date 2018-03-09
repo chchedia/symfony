@@ -82,6 +82,7 @@ class AdvertController extends Controller
 
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            $advert->setUser($this->getUser());
             //creer l'evenement
             $event= new MessagePostEvent($advert->getUser(), $advert->getContent());
             //declancher l'evenement

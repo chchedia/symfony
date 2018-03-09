@@ -47,3 +47,12 @@ services:
           - "2018-03-20"
         tags:
           - { name: kernel.event_listener, event: kernel.response, method: processBeta }
+    oc_platform.bigbrother.message_notificator:
+        class: OC\PlatformBundle\Bigbrother\MessageNotificator
+        arguments:
+          - "@mailer"
+    oc_platform.bigbrother.message_listener:
+        class: OC\PlatformBundle\Bigbrother\MessageListener
+        arguments:
+          - "@oc_platform.bigbrother.message_notificator"
+          -

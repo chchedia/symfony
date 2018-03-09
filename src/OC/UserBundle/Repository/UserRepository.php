@@ -10,4 +10,11 @@ namespace OC\UserBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getLikeQueryBuilder($pattern)
+    {
+        return $this
+            ->createQueryBuilder('c')
+            ->where('c.username LIKE :pattern')
+            ->setParameter('pattern',$pattern);
+    }
 }
