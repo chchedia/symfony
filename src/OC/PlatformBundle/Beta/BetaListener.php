@@ -33,5 +33,6 @@ class BetaListener
 
         // On met à jour la réponse avec la nouvelle valeur
         $event->setResponse($response);
+        //$event->stopPropagation();
     }
 }

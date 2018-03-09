@@ -55,4 +55,6 @@ services:
         class: OC\PlatformBundle\Bigbrother\MessageListener
         arguments:
           - "@oc_platform.bigbrother.message_notificator"
-          -
+          - ["alexandre", "marine", "pierre"]
+        tags:
+          - { name: kenerl.event_listener, event: oc_platform.post_message, method: processMessage }
