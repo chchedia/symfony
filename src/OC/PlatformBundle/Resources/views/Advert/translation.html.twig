@@ -2,6 +2,10 @@
 
 <html>
 <body class="margin : 20px">
-{{ 'Hello' |trans }} {{ name }}!
+{{ 'Hello' |trans({'%name%': name}) }}
+</br>
+{{ 'content' |trans }}
+</br>
+
 </body>
 </html>

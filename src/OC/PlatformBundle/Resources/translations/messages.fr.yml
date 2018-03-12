@@ -1,3 +1,6 @@
-Hello: Bonjour
+Hello: Bonjour %name% !
 Bye: 'Au revoir'
 List of Adverts: 'Liste des annonces'
+content: 'c est un message en français! '
+advert:
+    nombre: "[0,1]Il y a %count% annonce|[2,+Inf]Il y a %count% annonces"
