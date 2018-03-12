@@ -26,6 +26,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class AdvertController extends Controller
 {
+    /**
+     * @param $page
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction($page)
     {
         if ($page < 1) {
@@ -47,6 +51,10 @@ class AdvertController extends Controller
         ));
     }
 
+    /**
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function viewAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -103,6 +111,11 @@ class AdvertController extends Controller
 
     }
 
+    /**
+     * @param $id
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function editAction($id, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -128,7 +141,11 @@ class AdvertController extends Controller
         ));
     }
 
-
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function deleteAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -154,6 +171,10 @@ class AdvertController extends Controller
         ));
     }
 
+    /**
+     * @param $limit
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function menuAction($limit)
     {
         $em = $this->getDoctrine()->getManager();
@@ -169,7 +190,12 @@ class AdvertController extends Controller
         ));
     }
 
-    public function purgeAction($days, Request $request)
+    /**
+     * @param $days
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+     public function purgeAction($days, Request $request)
     {
         $purger = $this->get("oc_platform.purger.advert");
         $purger->purge($days);
@@ -178,6 +204,9 @@ class AdvertController extends Controller
         return $this->redirectToRoute('oc_platform_home');
     }
 
+    /**
+     * @return Response
+     */
     public function testAction()
     {
         $advert = new Advert;
@@ -197,5 +226,16 @@ class AdvertController extends Controller
         } else {
             return new Response("L'annonce est valide!");
         }
+    }
+
+    /**
+     * @param $name
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function translationAction($name)
+    {
+        return $this->render('OCPlatformBundle:Advert:translation.html.twig', array(
+            'name' => $name
+        ));
     }
 }
