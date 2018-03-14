@@ -55,8 +55,6 @@ class AdvertController extends Controller
     /**
      * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
-     * @ParamConverter("advert", options={"mapping": {"advert_id" : "id"}})
-     *
      */
     public function viewAction(Advert $advert)
     {
@@ -241,5 +239,13 @@ class AdvertController extends Controller
         return $this->render('OCPlatformBundle:Advert:translation.html.twig', array(
             'name' => $name
         ));
+    }
+
+    /**
+     * @ParamConverter("json")
+     */
+    public function ParamConverterAction($json)
+    {
+        return new Response(print_r($json, true));
     }
 }
