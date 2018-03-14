@@ -24,6 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+
 class AdvertController extends Controller
 {
     /**
@@ -55,16 +56,17 @@ class AdvertController extends Controller
      * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewAction($id)
+    public function viewAction( Advert $advert)
     {
         $em = $this->getDoctrine()->getManager();
-        $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
+        /*$advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
 
         if ($advert === null) {
             throw new NotFoundHttpException("L'annonce d'id " . $id . "n'existe pas.");
-        }
+        }*/
 
         // On récupère la liste des candidatures de cette annonce
+        
         $listApplications = $em
             ->getRepository('OCPlatformBundle:Application')
             ->findBy(array('advert' => $advert));
