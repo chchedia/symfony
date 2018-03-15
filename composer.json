@@ -34,7 +34,10 @@
         "symfony/swiftmailer-bundle": "^2.3.10",
         "symfony/symfony": "3.3.*",
         "twig/extensions": "^1.5",
-        "twig/twig": "^1.0||^2.0"
+        "twig/twig": "^1.0||^2.0",
+        "symfony/assetic-bundle": "^2.7.1",
+        "leafo/scssphp": "~0.6",
+        "patchwork/jsqueeze": "~1.0"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "~2.3",

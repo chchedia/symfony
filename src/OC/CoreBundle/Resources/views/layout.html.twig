@@ -11,6 +11,9 @@
     {% block stylesheets %}
         {# On charge le CSS de bootstrap depuis le site directement #}
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        {% stylesheets 'bundles/ocplatform/css/main.css' 'bundles/ocplatform/css/platform.css' %}
+            <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+        {% endstylesheets %}
     {% endblock %}
 </head>
 
@@ -66,6 +69,7 @@
     {# Ajoutez ces lignes JavaScript si vous comptez vous servir des fonctionnalités du bootstrap Twitter #}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
 {% endblock %}
 
 </body>
